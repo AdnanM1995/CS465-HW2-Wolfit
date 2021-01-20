@@ -84,7 +84,7 @@ class Post(db.Model):
         return markdown.markdown(self.body)
 
     def pretty_timestamp(self):
-        return pretty_date(self.timestamp)
+        return pretty_date(datetime.utcnow())
 
     def already_voted(self, user):
         return user in self.user_votes

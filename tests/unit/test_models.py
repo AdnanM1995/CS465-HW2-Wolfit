@@ -1,5 +1,6 @@
 import textwrap
 from datetime import timedelta
+from datetime import datetime
 
 from app import db
 from app.models import Category, Post, User
@@ -148,4 +149,7 @@ def test_posts_can_be_just_links_without_body(client, test_user):
     assert new_post.link
     
 def test_pretty_timestamp(client):
-	assert app.models.pretty_timestamp(client) == datetime.utcnow()
+	assert Post.pretty_timestamp(client) == "just now"
+	
+def test_pretty_date(client):
+	assert Post.pretty_date(client) == "just now"
