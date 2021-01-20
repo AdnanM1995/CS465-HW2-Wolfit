@@ -3,7 +3,7 @@ from datetime import timedelta
 from datetime import datetime
 
 from app import db
-from app.models import Category, Post, User
+from app.models import Category, Post, User, Comment
 
 
 def test_new_user():
@@ -152,4 +152,4 @@ def test_pretty_timestamp(client):
 	assert Post.pretty_timestamp(client) == "just now"
 	
 def test_pretty_date(client):
-	assert Post.pretty_date(client) == "just now"
+	assert Comment.pretty_date(client) == "just now"

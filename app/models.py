@@ -144,8 +144,8 @@ class Comment(db.Model):
     def __repr__(self):
         return f"<Comment id {self.id} - {self.body[:20]}>"
 
-    def pretty_timestamp(self):
-        return pretty_date(self.timestamp)
+    def pretty_date(self):
+        return pretty_date(datetime.utcnow())
 
     def already_voted(self, user):
         return user in self.user_votes
