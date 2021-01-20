@@ -78,6 +78,10 @@ def test_post_vote_count_goes_up_after_voting(client, test_user, single_post):
     single_post.up_vote(test_user)
     assert single_post.vote_count == 1
 
+def test_post_vote_count_goes_down_after_downvoting(client, test_user, single_post):
+    assert single_post.vote_count == 0
+    single_post.down_vote(test_user)
+    assert single_post.vote_count == -1
 
 def test_a_user_can_only_vote_once(client, test_user, single_post):
     single_post.up_vote(test_user)
@@ -142,3 +146,6 @@ def test_posts_can_be_just_links_without_body(client, test_user):
     title = "Link post"
     new_post = Post(title=title, link=True, url="http://wou.edu")
     assert new_post.link
+    
+def test_pretty_timestamp(client):
+	assert app.models.pretty_timestamp(client) == datetime.utcnow()
