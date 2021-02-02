@@ -206,7 +206,7 @@ class ActivityLog(db.Model):
         post_url = "http://0.0.0.0:8000/api/activities"
         new_activity = {
             "user_id": user_id,
-            "timestamp" : "2021-01-25 22:33:33",
+            "timestamp" : str(datetime.utcnow()),
             "details": details
         }
         r = requests.post(post_url,json=new_activity)
