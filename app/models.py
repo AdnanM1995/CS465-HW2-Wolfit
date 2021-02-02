@@ -3,6 +3,9 @@ import click
 import requests
 import json
 import datetime
+import pymongo
+
+
 
 from datetime import datetime
 
@@ -14,6 +17,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db, login
 from app.helpers import pretty_date
+from pymongo import MongoClient
+
+cluster = MongoClient("mongodb+srv://adnan:adnan@cluster0.gvvdi.mongodb.net/<dbname>?retryWrites=true&w=majority")
+database = cluster["Wolfit"]
+collection = database["Activity_log"]
 
 user_vote = db.Table(
     "user_vote",
@@ -195,8 +203,8 @@ class ActivityLog(db.Model):
             activities = json.loads(r.text)
             l = len(activities)
             single_activity = activities["activities"][len - 1]
-
-        return single_activity
+            return single_activity
+        return None
 
     @classmethod
     def log_event(cls, user_id, details):
@@ -213,6 +221,7 @@ class ActivityLog(db.Model):
         if r.status_code == 201:
             print(f"Post new activity SUCCESS at {post_url}")
             print(json.loads(r.text))
+            collection.insert_one(json.loads(r.text))
         else:
             print(f"Post new activity FAILURE: {r.text}")
 
