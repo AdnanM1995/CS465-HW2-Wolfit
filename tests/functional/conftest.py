@@ -40,7 +40,6 @@ class LiveClient(object):
         threading.Thread(target=app.run).start()
         time.sleep(0.5)
         self.ctx.push()
-
     def end(self):
         # remove application context
         self.ctx.pop()

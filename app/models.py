@@ -1,3 +1,9 @@
+#!/usr/lib python
+import click
+import requests
+import json
+import datetime
+
 from datetime import datetime
 
 from flask_login import UserMixin
@@ -182,15 +188,39 @@ class ActivityLog(db.Model):
 
     @classmethod
     def latest_entry(cls):
-        return cls.query.order_by(ActivityLog.id.desc()).first()
+        get_url = "http://0.0.0.0:8000/api/activities/"
+        r = requests.get(get_url)
+        if r.status_code == 200:
+            print(f"Get activities SUCCESS at {get_url}")
+            activities = json.loads(r.text)
+            l = len(activities)
+            single_activity = activities["activities"][len - 1]
+
+        return single_activity
 
     @classmethod
     def log_event(cls, user_id, details):
-        e = cls(user_id=user_id, details=details)
-        db.session.add(e)
-        db.session.commit()
+        # e = cls(user_id=user_id, details=details)
+        # db.session.add(e)
+        # db.session.commit()
+        post_url = "http://0.0.0.0:8000/api/activities"
+        new_activity = {
+            "user_id": user_id,
+            "timestamp" : "2021-01-25 22:33:33",
+            "details": details
+        }
+        r = requests.post(post_url,json=new_activity)
+        if r.status_code == 201:
+            print(f"Post new activity SUCCESS at {post_url}")
+            print(json.loads(r.text))
+        else:
+            print(f"Post new activity FAILURE: {r.text}")
+
+@click.command()
+@click.argument("url", type=click.STRING)
 
 
 @login.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
